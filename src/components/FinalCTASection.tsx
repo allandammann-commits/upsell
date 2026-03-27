@@ -2,14 +2,6 @@ import React, { useEffect } from 'react';
 import { Heart, Shield } from 'lucide-react';
 import './FinalCTASection.css';
 
-declare global {
-  interface Window {
-    checkoutElements?: {
-      init: (mode: string) => { mount: (selector: string) => void }
-    }
-  }
-}
-
 const FinalCTASection: React.FC = () => {
   useEffect(() => {
     const mount = () => {

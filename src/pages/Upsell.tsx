@@ -7,12 +7,6 @@ type CheckoutElementsAPI = {
   };
 };
 
-declare global {
-  interface Window {
-    checkoutElements?: CheckoutElementsAPI;
-  }
-}
-
 const ACCENT = '#7b2d8e';
 const BG = '#faf8fc';
 
