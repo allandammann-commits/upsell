@@ -1,3 +1,4 @@
+import type * as React from 'react';
 declare global {
   interface Window {
     checkoutElements?: {
@@ -8,7 +9,7 @@ declare global {
   }
   namespace JSX {
     interface IntrinsicElements {
-      'vturb-smartplayer': any
+      'vturb-smartplayer': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
     }
   }
 }

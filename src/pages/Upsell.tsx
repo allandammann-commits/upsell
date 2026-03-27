@@ -1,12 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-type CheckoutInitOptions = Record<string, unknown>;
-type CheckoutElementsAPI = {
-  init: (kind: 'salesFunnel' | string, options?: CheckoutInitOptions) => {
-    mount: (selector: string) => void
-  };
-};
-
 const ACCENT = '#7b2d8e';
 const BG = '#faf8fc';
 
@@ -73,22 +66,21 @@ export default function Upsell() {
     return { main, cents };
   }, []);
 
-  const NO_DELAY = import.meta.env.DEV === true
-    || (typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('fast'))
-    || import.meta.env.VITE_UPSELL_NO_DELAY === 'true';
+  const NO_DELAY =
+    (typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('fast')) ||
+    import.meta.env.VITE_UPSELL_NO_DELAY === 'true';
 
   useEffect(() => {
     if (NO_DELAY) {
       setRevealed(true);
       return;
     }
-    const t = setTimeout(() => setRevealed(true), 60000);
+    const t = setTimeout(() => setRevealed(true), 120000);
     return () => clearTimeout(t);
   }, [NO_DELAY]);
 
   useEffect(() => {
     if (!revealed || mountedWidget) return;
-    if (import.meta.env.DEV) return;
     const ensureHotmartScript = () =>
       new Promise<void>((resolve, reject) => {
         if (window.checkoutElements && typeof window.checkoutElements.init === 'function') {
@@ -107,7 +99,12 @@ export default function Upsell() {
         s.async = true;
         s.addEventListener('load', () => resolve(), { once: true });
         s.addEventListener('error', () => reject(new Error('Hotmart script load error')), { once: true });
-        document.head.appendChild(s);
+        const anchor = document.getElementById('hotmart-script-anchor');
+        if (anchor) {
+          anchor.appendChild(s);
+        } else {
+          document.head.appendChild(s);
+        }
       });
 
     ensureHotmartScript()
@@ -172,33 +169,34 @@ export default function Upsell() {
                 />
               </div>
             </div>
-          </div>
-          <div className="mt-4 rounded-lg border px-3 py-2 flex items-center justify-center gap-2" style={{ borderColor: `${ACCENT}66`, background: `${ACCENT}0F` }}>
-            <HourglassIcon className="w-4 h-4" />
-            <p className="text-sm" style={{ color: ACCENT }}>
-              Esta oferta exclusiva expira cuando cierres esta página
-            </p>
-          </div>
-          <div className="mt-4 rounded-xl border shadow-sm p-4 text-center" style={{ borderColor: `${ACCENT}66` }}>
-            <p className="text-sm text-neutral-600">
-              4 consultas privadas = <span className="line-through text-[#dc2626] font-medium">$400 USD</span>
-            </p>
-            <div className="mt-2 flex items-baseline justify-center gap-2">
-              <span style={{ color: ACCENT }} className="text-2xl font-bold">$</span>
-              <span className="text-5xl font-extrabold text-neutral-900" style={{ fontFamily: '"Playfair Display", serif' }}>
-                {priceParts.main}
-              </span>
-              <span style={{ color: ACCENT }} className="text-2xl font-bold">.{priceParts.cents}</span>
-            </div>
-            <p className="text-sm text-neutral-600 mt-1">Acceso para siempre · Un único pago</p>
-          </div>
-          <div className="mt-4">
-            <div id="hotmart-sales-funnel"></div>
-          </div>
+        </div>
         </div>
         
         <div className={`mt-6 ${revealed ? 'fade-in' : 'hidden'}`}>
           <div className="space-y-6">
+            <div className="rounded-lg border px-3 py-2 flex items-center justify-center gap-2" style={{ borderColor: `${ACCENT}66`, background: `${ACCENT}0F` }}>
+              <HourglassIcon className="w-4 h-4" />
+              <p className="text-sm" style={{ color: ACCENT }}>
+                Esta oferta exclusiva expira cuando cierres esta página
+              </p>
+            </div>
+            <div id="hotmart-script-anchor"></div>
+            <div className="mt-2">
+              <div id="hotmart-sales-funnel"></div>
+            </div>
+            <div className="rounded-xl border shadow-sm p-4 text-center" style={{ borderColor: `${ACCENT}66` }}>
+              <p className="text-sm text-neutral-600">
+                4 consultas privadas = <span className="line-through text-[#dc2626] font-medium">$400 USD</span>
+              </p>
+              <div className="mt-2 flex items-baseline justify-center gap-2">
+                <span style={{ color: ACCENT }} className="text-2xl font-bold">$</span>
+                <span className="text-5xl font-extrabold text-neutral-900" style={{ fontFamily: '"Playfair Display", serif' }}>
+                  {priceParts.main}
+                </span>
+                <span style={{ color: ACCENT }} className="text-2xl font-bold">.{priceParts.cents}</span>
+              </div>
+              <p className="text-sm text-neutral-600 mt-1">Acceso para siempre · Un único pago</p>
+            </div>
             <div className="relative mx-auto max-w-[640px] rounded-2xl border p-6 text-center" style={{ borderColor: '#16a34a66', background: '#dff7ea' }}>
               <div className="absolute -top-5 left-1/2 -translate-x-1/2">
                 <div className="h-12 w-12 rounded-full bg-green-100 text-green-700 flex items-center justify-center shadow-sm">
