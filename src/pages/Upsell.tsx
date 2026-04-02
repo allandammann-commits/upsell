@@ -124,7 +124,7 @@ export default function Upsell() {
     if (existing) return;
     const s = document.createElement('script');
     s.id = 'vturb-player-script';
-    s.src = 'https://scripts.converteai.net/26b395b5-c65f-4a7a-b43b-982b855ae935/players/69c5e2455493e88bf0fe0a18/v4/player.js';
+    s.src = 'https://scripts.converteai.net/eace989b-db46-41fb-9133-2b70e27ad3d6/players/69cdcb15181cf04198569c93/v4/player.js';
     s.async = true;
     document.head.appendChild(s);
   }, []);
@@ -164,8 +164,8 @@ export default function Upsell() {
             <div className="relative w-full" style={{ paddingBottom: '177.78%' }}>
               <div className="absolute inset-0 flex items-center justify-center bg-white">
                 <vturb-smartplayer
-                  id="vid-69c5e2455493e88bf0fe0a18"
-                  style={{ display: 'block', margin: '0 auto', width: '100%', maxWidth: '640px', height: '100%' }}
+                  id="vid-69cdcb15181cf04198569c93"
+                  style={{ display: 'block', margin: '0 auto', width: '100%', maxWidth: '400px', height: '100%' }}
                 />
               </div>
             </div>
