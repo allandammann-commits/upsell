@@ -257,12 +257,12 @@ export default function Upsell() {
                 <span style={{ color: ACCENT }} className="text-3xl font-bold">.{priceParts.cents}</span>
               </div>
               <p className="text-base text-neutral-500 mt-3 font-medium tracking-wide">Acceso para siempre · Un único pago</p>
-            </div>
-
-            {/* SEÇÃO 9 — Widget Hotmart */}
-            <div className="mt-2 min-h-[100px]">
-              <div id="hotmart-script-anchor"></div>
-              <div id="hotmart-sales-funnel"></div>
+              
+              {/* SEÇÃO 9 — Widget Hotmart (dentro ou logo abaixo do preço para máxima conversão) */}
+              <div className="mt-8 min-h-[100px]">
+                <div id="hotmart-script-anchor"></div>
+                <div id="hotmart-sales-funnel"></div>
+              </div>
             </div>
 
             {/* SEÇÃO 10 — Garantia */}
