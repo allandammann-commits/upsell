@@ -151,13 +151,13 @@ export default function Upsell() {
         </div>
 
         {/* SEÇÃO 3 — Vídeo VSL */}
-        <div className="mt-6 relative px-1">
-          <div className="relative w-full rounded-2xl border overflow-hidden shadow-[0_0_30px_rgba(123,45,142,0.15)] transition-shadow duration-500 hover:shadow-[0_0_40px_rgba(123,45,142,0.25)]" style={{ borderColor: 'rgba(123, 45, 142, 0.2)' }}>
+        <div className="mt-6 relative -mx-4 md:-mx-0">
+          <div className="relative w-full overflow-hidden shadow-[0_0_30px_rgba(123,45,142,0.15)] transition-shadow duration-500 hover:shadow-[0_0_40px_rgba(123,45,142,0.25)] md:rounded-2xl md:border" style={{ borderColor: 'rgba(123, 45, 142, 0.2)' }}>
             <div className="relative w-full" style={{ paddingBottom: '177.78%' }}>
               <div className="absolute inset-0 flex items-center justify-center bg-white">
                 <vturb-smartplayer
                   id="vid-69cdcb15181cf04198569c93"
-                  style={{ display: 'block', margin: '0 auto', width: '100%', maxWidth: '400px', height: '100%' }}
+                  style={{ display: 'block', margin: '0 auto', width: '100%', height: '100%' }}
                 />
               </div>
             </div>
