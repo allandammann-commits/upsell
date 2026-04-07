@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Montserrat:wght@400;500;600;700&display=swap');
+
 /* Reset e estilos base */
 * {
   margin: 0;
@@ -7,52 +9,21 @@
 
 body {
   font-family: 'Montserrat', sans-serif;
-  background: #1c1c2c;
-  color: #ffffff;
+  background: #faf8fc;
+  color: #3d3d54;
   line-height: 1.6;
   overflow-x: hidden;
-}
-
-/* Cores da identidade visual */
-:root {
-  --primary-dark: #1c1c2c;
-  --primary-dark-light: #2d2d42;
-  --primary-dark-lighter: #3e3e58;
-  --magenta-neon: #FF0099;
-  --text-white: #ffffff;
-  --text-gray: #b8b8b8;
-  --accent-yellow: #FFD700;
-  --success-green: #00FF88;
-  --gradient-bg: #1c1c2c;
 }
 
 /* Animações */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes neonGlow {
-  0%, 100% {
-    text-shadow: 0 0 10px var(--magenta-neon), 0 0 20px var(--magenta-neon), 0 0 30px var(--magenta-neon);
-  }
-  50% {
-    text-shadow: 0 0 20px var(--magenta-neon), 0 0 30px var(--magenta-neon), 0 0 40px var(--magenta-neon);
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
   }
 }
 
@@ -61,8 +32,57 @@ body {
   to { opacity: 1 }
 }
 
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .fade-in {
-  animation: fadeIn 0.6s ease both;
+  animation: fadeIn 0.8s ease both;
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.8s ease both;
+}
+
+.slide-down {
+  animation: slideDown 0.6s ease both;
+}
+
+/* Mesh Gradient Background */
+.mesh-gradient {
+  background-color: #faf8fc;
+  background-image: 
+    radial-gradient(at 10% 20%, rgba(243, 232, 249, 0.6) 0px, transparent 50%),
+    radial-gradient(at 90% 10%, rgba(243, 232, 249, 0.4) 0px, transparent 50%),
+    radial-gradient(at 80% 90%, rgba(243, 232, 249, 0.5) 0px, transparent 50%),
+    radial-gradient(at 20% 80%, rgba(243, 232, 249, 0.3) 0px, transparent 50%);
+  background-attachment: fixed;
+}
+
+/* Staggered animations */
+.stagger-1 { animation-delay: 100ms; }
+.stagger-2 { animation-delay: 200ms; }
+.stagger-3 { animation-delay: 300ms; }
+
+/* Pulse Glow */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 1px rgba(123,45,142,0.05), 0 4px 16px rgba(123,45,142,0.08), 0 0 40px rgba(123,45,142,0.04);
+  }
+  50% {
+    box-shadow: 0 0 0 2px rgba(123,45,142,0.1), 0 8px 24px rgba(123,45,142,0.12), 0 0 60px rgba(123,45,142,0.08);
+  }
+}
+
+.pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
 }
 
 /* Classes utilitárias */

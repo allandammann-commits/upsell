@@ -3,13 +3,10 @@ import React, { useEffect, useMemo, useState } from 'react';
 const ACCENT = '#7b2d8e';
 const ACCENT_LIGHT = '#9b3fad';
 const ACCENT_SOFT = '#c87dd9';
-const BG = '#faf8fc';
-const BG_CARD = '#ffffff';
-const BG_SOFT = '#f5f0f8';
 const TEXT_TITLE = '#1a1a2e';
 const TEXT_BODY = '#3d3d54';
 const TEXT_SECONDARY = '#7a7a8f';
-const BORDER_COLOR = 'rgba(123, 45, 142, 0.12)';
+const BORDER_GRADIENT = 'linear-gradient(135deg, #7b2d8e, #c87dd9)';
 
 function CheckIcon({ className = 'w-5 h-5' }: { className?: string }) {
   return (
@@ -20,31 +17,45 @@ function CheckIcon({ className = 'w-5 h-5' }: { className?: string }) {
   );
 }
 
-function FeatureIcon({ type }: { type: 'chat' | 'shield' | 'refresh' | 'star' }) {
+function FeatureIcon({ type }: { type: 'chat' | 'shield' | 'refresh' | 'star' | 'clock' }) {
   if (type === 'chat') {
     return (
-      <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z" stroke={ACCENT} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+        <defs>
+          <linearGradient id="chat-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#7b2d8e" />
+            <stop offset="100%" stopColor="#c87dd9" />
+          </linearGradient>
+        </defs>
+        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z" stroke="url(#chat-grad)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     );
   }
   if (type === 'shield') {
     return (
-      <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke={ACCENT} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke={ACCENT} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     );
   }
   if (type === 'refresh') {
     return (
-      <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0118.8-4.3M22 12.5a10 10 0 01-18.8 4.2" stroke={ACCENT} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+        <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0118.8-4.3M22 12.5a10 10 0 01-18.8 4.2" stroke={ACCENT} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    );
+  }
+  if (type === 'star') {
+    return (
+      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke={ACCENT} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     );
   }
   return (
-    <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke={ACCENT} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="10" stroke={ACCENT} strokeWidth="2" />
+      <path d="M12 6v6l4 2" stroke={ACCENT} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -74,7 +85,7 @@ export default function Upsell() {
       setRevealed(true);
       return;
     }
-    const t = setTimeout(() => setRevealed(true), 60000);
+    const t = setTimeout(() => setRevealed(true), 132000);
     return () => clearTimeout(t);
   }, [NO_DELAY]);
 
@@ -106,7 +117,8 @@ export default function Upsell() {
     ensureHotmartScript()
       .then(() => {
         if (window.checkoutElements && typeof window.checkoutElements.init === 'function') {
-          window.checkoutElements.init('salesFunnel').mount('#hotmart-sales-funnel');
+          window.checkoutElements.init('salesFunnel').mount('#hotmart-sales-funnel-top');
+          window.checkoutElements.init('salesFunnel').mount('#hotmart-sales-funnel-bottom');
           setMountedWidget(true);
         }
       })
@@ -124,35 +136,35 @@ export default function Upsell() {
   }, []);
 
   return (
-    <div style={{ background: BG, color: TEXT_BODY }} className="min-h-screen w-full font-sans overflow-x-hidden pb-20">
-      <div className="mx-auto max-w-[640px] px-4 py-5 text-center">
+    <div className="min-h-screen w-full font-sans overflow-x-hidden pb-20 mesh-gradient">
+      <div className="mx-auto max-w-[640px] px-4 py-8 text-center">
         
         {/* SEÇÃO 1 — Barra de confirmação */}
-        <div className="sticky top-0 z-50 mb-6 slide-down">
-          <div className="flex items-center justify-center gap-2 rounded-xl border border-[#bbf7d0] bg-[#ecfdf5] px-4 py-3 shadow-sm">
+        <div className="sticky top-4 z-50 mb-12 md:mb-16 slide-down">
+          <div className="flex items-center justify-center gap-2 rounded-xl border border-[#bbf7d0] bg-[#ecfdf5]/80 backdrop-blur-sm px-4 py-3 shadow-sm">
             <CheckIcon className="w-5 h-5 flex-shrink-0" />
-            <p className="text-sm font-medium text-green-800">
+            <p className="text-xs font-medium text-green-800 md:text-sm">
               ¡Compra aprobada! Tu acceso a la <span className="font-bold">Frecuencia Límbica</span> está confirmado.
             </p>
           </div>
         </div>
 
         {/* SEÇÃO 2 — Headline + Sub-headline */}
-        <div className="mt-8 mb-6 fade-in">
+        <div className="mb-12 md:mb-16 fade-in">
           <h1
-            className="font-extrabold leading-tight text-[clamp(24px,7vw,38px)]"
-            style={{ fontFamily: '"Playfair Display", serif', color: TEXT_TITLE }}
+            className="font-bold leading-tight text-[clamp(28px,7vw,34px)]"
+            style={{ fontFamily: '"Cormorant Garamond", serif', color: TEXT_TITLE }}
           >
             ESPERA — <span style={{ color: ACCENT }}>Tu pedido no está completo</span>
           </h1>
-          <p className="mt-4 text-[clamp(15px,4.5vw,19px)] leading-relaxed font-medium">
+          <p className="mt-4 text-[clamp(15px,4.5vw,18px)] leading-relaxed font-medium text-[#7a7a8f]">
             La Frecuencia Límbica lo trae de vuelta. Pero sin esto, <span className="text-[#dc2626] font-bold">podrías perderlo otra vez.</span>
           </p>
         </div>
 
         {/* SEÇÃO 3 — Vídeo VSL */}
-        <div className="mt-6 relative -mx-4 md:-mx-0">
-          <div className="relative w-full overflow-hidden shadow-[0_0_30px_rgba(123,45,142,0.15)] transition-shadow duration-500 hover:shadow-[0_0_40px_rgba(123,45,142,0.25)] md:rounded-2xl md:border" style={{ borderColor: 'rgba(123, 45, 142, 0.2)' }}>
+        <div className="mb-12 md:mb-16 relative -mx-4 md:-mx-0">
+          <div className="relative w-full overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.04),0_8px_24px_rgba(123,45,142,0.06)] md:rounded-2xl border border-white">
             <div className="relative w-full" style={{ paddingBottom: '177.78%' }}>
               <div className="absolute inset-0 flex items-center justify-center bg-white">
                 <vturb-smartplayer
@@ -165,74 +177,97 @@ export default function Upsell() {
         </div>
         
         {/* CONTEÚDO COM DELAY */}
-        <div className={`mt-12 ${revealed ? 'fade-in' : 'hidden'}`}>
-          <div className="space-y-12">
+        <div className={`mt-12 md:mt-16 ${revealed ? 'fade-in-up' : 'hidden'}`}>
+          <div className="space-y-12 md:space-y-16">
             
+            {/* NOVO: Widget Hotmart Topo (abaixo do vídeo) */}
+            <div className="min-h-[100px] mb-8">
+              <div id="hotmart-script-anchor"></div>
+              <div id="hotmart-sales-funnel-top"></div>
+            </div>
+
             {/* SEÇÃO 4 — Bloco de copy emocional */}
-            <div className="rounded-2xl bg-white p-8 border border-[rgba(123,45,142,0.1)] shadow-sm text-center transition-all hover:shadow-md">
-              <div className="space-y-4 text-[clamp(16px,4.5vw,19px)] italic leading-relaxed text-neutral-700">
-                <p>"¿Qué pasa cuando él te escribe y no sabes qué responder?"</p>
-                <p>"¿Cuando se ven y dices algo que lo arruina todo?"</p>
-                <p>"¿Cuando vuelve pero a las semanas se pone frío otra vez?"</p>
+            <div className="text-center px-4">
+              <div className="h-px w-full bg-gradient-to-r from-transparent via-[#7b2d8e]/30 to-transparent mb-12" />
+              
+              <div className="space-y-8 text-[clamp(20px,6vw,26px)] italic leading-[1.4] text-[#1a1a2e] font-semibold" style={{ fontFamily: '"Cormorant Garamond", serif' }}>
+                <p className="relative">
+                  "¿Qué pasa cuando él te escribe y no sabes qué responder?"
+                </p>
+                <p>
+                  "¿Cuando se ven y dices algo que lo arruina todo?"
+                </p>
+                <p>
+                  "¿Cuando vuelve pero a las semanas se pone frío otra vez?"
+                </p>
               </div>
-              <div className="my-8 h-px w-full bg-gradient-to-r from-transparent via-[rgba(123,45,142,0.2)] to-transparent" />
-              <p className="text-[clamp(17px,4.8vw,20px)] leading-relaxed font-medium">
-                La frecuencia reactiva el interruptor. Pero lo que tú haces después decide si <span className="font-bold" style={{ color: ACCENT }}>se queda para siempre</span> o si <span className="text-[#dc2626] font-bold">lo pierdes de nuevo.</span>
+
+              <div className="h-px w-full bg-gradient-to-r from-transparent via-[#7b2d8e]/30 to-transparent my-12" />
+              
+              <p className="text-[clamp(16px,4.5vw,18px)] leading-relaxed font-medium text-[#3d3d54] max-w-[520px] mx-auto">
+                La frecuencia reactiva el interruptor. Pero lo que tú haces después decide si <span className="font-bold underline decoration-[#7b2d8e]/40 underline-offset-4" style={{ color: ACCENT }}>se queda para siempre</span> o si <span className="text-[#dc2626] font-bold">lo pierdes de nuevo.</span>
               </p>
             </div>
 
-            {/* SEÇÃO 5 — Apresentação da Mentoría */}
-            <div className="relative rounded-2xl bg-white p-8 border-2 shadow-[0_15px_45px_rgba(123,45,142,0.15)] transition-all hover:scale-[1.01]" style={{ borderColor: ACCENT }}>
-              <div className="absolute -top-3 right-4">
-                <span className="rounded-full bg-[#7b2d8e] px-4 py-1 text-[11px] font-bold tracking-wider text-white uppercase shadow-sm">
+            {/* SEÇÃO 5 — Apresentação da Mentoría (DESTAQUE MÁXIMO) */}
+            <div 
+              className="relative rounded-[16px] p-7 md:p-10 shadow-[0_1px_3px_rgba(0,0,0,0.04),0_8px_24px_rgba(123,45,142,0.06)] hover:translate-y-[-2px] hover:shadow-[0_4px_12px_rgba(0,0,0,0.05),0_12px_32px_rgba(123,45,142,0.1)] transition-all duration-300"
+              style={{ 
+                background: 'linear-gradient(white, white) padding-box, linear-gradient(135deg, #7b2d8e, #c87dd9) border-box',
+                border: '2px solid transparent'
+              }}
+            >
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                <span className="rounded-full bg-gradient-to-r from-[#7b2d8e] to-[#9b3fad] px-4 py-1.5 text-[11px] font-bold tracking-[2px] text-white uppercase shadow-md">
                   INCLUIDA
                 </span>
               </div>
-              <div className="flex flex-col items-center gap-5">
-                <div className="rounded-full p-4 bg-purple-50 border border-purple-100">
+              <div className="flex flex-col items-center gap-5 pt-2">
+                <div className="flex items-center justify-center">
                   <FeatureIcon type="chat" />
                 </div>
-                <h2 className="text-2xl font-bold leading-tight" style={{ color: TEXT_TITLE, fontFamily: '"Playfair Display", serif' }}>
+                <h2 className="text-[22px] font-bold leading-tight" style={{ color: TEXT_TITLE, fontFamily: '"Cormorant Garamond", serif' }}>
                   Mentoría Privada con la Dra. Paola — 24/7
                 </h2>
-                <p className="text-lg leading-relaxed text-neutral-600">
+                <p className="text-base leading-relaxed text-[#7a7a8f]">
                   Acceso directo ilimitado. Te dice exactamente qué escribir, qué decir y cómo actuar en cada momento. A cualquier hora. Cualquier día.
                 </p>
               </div>
             </div>
 
             {/* SEÇÃO 6 — 3 Frecuências extras */}
-            <div className="grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-1 gap-3">
               <FeatureCard
                 icon={<FeatureIcon type="shield" />}
                 title="Frecuencia de Blindaje Emocional"
                 desc="Mantiene ese interruptor encendido permanentemente para que él nunca más quiera alejarse."
+                className="stagger-1"
               />
               <FeatureCard
                 icon={<FeatureIcon type="refresh" />}
                 title="Frecuencia Anti-Recaída"
                 desc="Para cuando él se pone frío o distante. Lo reconecta antes de que la distancia crezca."
+                className="stagger-2"
               />
               <FeatureCard
                 icon={<FeatureIcon type="star" />}
                 title="Frecuencia de Borrado"
                 desc="Elimina las heridas del pasado para que la relación empiece limpia, sin rencores ni fantasmas."
+                className="stagger-3"
               />
             </div>
 
             {/* SEÇÃO 7 — Depoimento */}
-            <div className="relative overflow-hidden rounded-2xl bg-[#f5f0f8] p-8 border-l-[5px] text-left" style={{ borderColor: ACCENT }}>
-              <div className="absolute top-2 right-4 opacity-10 pointer-events-none">
-                <svg width="80" height="80" viewBox="0 0 24 24" fill={ACCENT}>
-                  <path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C20.1216 16 21.017 16.8954 21.017 18V21C21.017 22.1046 20.1216 23 19.017 23H16.017C14.9124 23 14.017 22.1046 14.017 21ZM14.017 21V10C14.017 6.13401 17.151 3 21.017 3V5C18.2556 5 16.017 7.23858 16.017 10H21.017V16H16.017C14.9124 16 14.017 16.8954 14.017 18V21ZM3 21L3 18C3 16.8954 3.89543 16 5 16H8C9.10457 16 10 16.8954 10 18V21C10 22.1046 9.10457 23 8 23H5C3.89543 23 3 22.1046 3 21ZM3 21V10C3 6.13401 6.13401 3 10 3V5C7.23858 5 5 7.23858 5 10H10V16H5C3.89543 16 3 16.8954 3 18V21Z" />
-                </svg>
+            <div className="relative overflow-hidden rounded-[16px] bg-[#f5f0f8] p-8 text-left border-none">
+              <div className="absolute top-[-10px] left-4 text-[72px] font-serif leading-none opacity-[0.12] text-[#7b2d8e] pointer-events-none" style={{ fontFamily: '"Cormorant Garamond", serif' }}>
+                "
               </div>
               <div className="relative z-10">
-                <p className="text-[17px] italic leading-relaxed text-neutral-700">
-                  "Yo compré la frecuencia y a los 3 días él me escribió. Pero casi lo arruino mandándole mil mensajes. La Dra. Paola me guió paso a passo y hoy llevamos 3 meses juntos. Sin la mentoría lo hubiera perdido esa noche. Lo sé."
+                <p className="text-base italic leading-[1.7] text-[#3d3d54]">
+                  "Yo compré la frecuencia y a los 3 días él me escribió. Pero casi lo arruino mandándole mil mensajes. La Dra. Paola me guió paso a paso y hoy llevamos 3 meses juntos. Sin la mentoría lo hubiera perdido esa noche. Lo sé."
                 </p>
-                <div className="mt-6 flex items-center justify-between border-t border-purple-100 pt-4">
-                  <p className="font-bold text-neutral-900">— Dolores</p>
+                <div className="mt-6 flex items-center gap-3">
+                  <p className="text-[15px] font-bold text-[#7b2d8e]"> Dolores</p>
                   <div className="flex gap-0.5">
                     {[1, 2, 3, 4, 5].map((i) => (
                       <svg key={i} className="w-4 h-4 fill-[#7b2d8e]" viewBox="0 0 20 20">
@@ -245,69 +280,57 @@ export default function Upsell() {
             </div>
 
             {/* SEÇÃO 8 — Ancoragem + Preço */}
-            <div className="rounded-3xl bg-white p-10 border-2 shadow-[0_20px_60px_rgba(123,45,142,0.18)] text-center transition-all pulse-glow" style={{ borderColor: ACCENT }}>
-              <p className="text-lg text-neutral-500 font-medium">
-                4 consultas privadas = <span className="line-through text-[#dc2626]">$400 USD</span>
+            <div className="rounded-[16px] bg-white p-8 md:p-10 border-2 border-[#7b2d8e]/15 text-center transition-all pulse-glow">
+              <p className="text-sm text-[#7a7a8f] font-medium">
+                4 consultas privadas = <span className="line-through text-[#dc2626] decoration-red-600">$400 USD</span>
               </p>
-              <div className="mt-4 flex items-baseline justify-center gap-2">
-                <span style={{ color: ACCENT }} className="text-3xl font-bold">$</span>
-                <span className="text-7xl font-extrabold text-neutral-900 tracking-tighter" style={{ fontFamily: '"Playfair Display", serif' }}>
+              <div className="mt-4 flex items-start justify-center">
+                <span style={{ color: ACCENT }} className="text-[26px] font-bold mt-2">$</span>
+                <span className="text-[52px] font-bold text-[#1a1a2e] leading-none" style={{ fontFamily: '"Cormorant Garamond", serif' }}>
                   {priceParts.main}
                 </span>
-                <span style={{ color: ACCENT }} className="text-3xl font-bold">.{priceParts.cents}</span>
+                <span style={{ color: ACCENT }} className="text-[26px] font-bold mt-2">.{priceParts.cents}</span>
               </div>
-              <p className="text-base text-neutral-500 mt-3 font-medium tracking-wide">Acceso para siempre · Un único pago</p>
+              <p className="text-[13px] text-[#7a7a8f] mt-3 font-medium">
+                Acceso <span className="text-[#7b2d8e] font-bold">para siempre</span> · Un único pago
+              </p>
               
-              {/* SEÇÃO 9 — Widget Hotmart (dentro ou logo abaixo do preço para máxima conversão) */}
+              {/* SEÇÃO 9 — Widget Hotmart */}
               <div className="mt-8 min-h-[100px]">
-                <div id="hotmart-script-anchor"></div>
-                <div id="hotmart-sales-funnel"></div>
+                <div id="hotmart-sales-funnel-bottom"></div>
               </div>
             </div>
 
             {/* SEÇÃO 10 — Garantia */}
-            <div className="flex flex-col md:flex-row items-center gap-6 rounded-2xl border bg-white p-8 shadow-sm transition-all hover:shadow-md" style={{ borderColor: 'rgba(34, 197, 94, 0.2)' }}>
+            <div className="flex items-center gap-5 rounded-[16px] border border-green-100 bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04),0_8px_24px_rgba(123,45,142,0.06)]">
               <div className="flex-shrink-0 relative">
-                <div className="h-20 w-20 rounded-full bg-green-50 flex items-center justify-center border-2 border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.15)]">
-                  <div className="text-center leading-none">
-                    <div className="text-xl font-black text-green-600">30</div>
-                    <div className="text-[10px] font-black text-green-600 uppercase tracking-tighter">DÍAS</div>
-                  </div>
-                </div>
-                <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1.5 text-white shadow-sm">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 4.925-3.467 9.435-9.255 10.544a.75.75 0 01-.29 0c-5.788-1.109-9.255-5.619-9.255-10.544 0-.68.056-1.35.166-2.001zM13 8a1 1 0 00-2 0v2H9V8a1 1 0 10-2 0v2H5a1 1 0 100 2h2v2a1 1 0 102 0v-2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V8z" clipRule="evenodd" />
-                  </svg>
+                <div className="h-[60px] w-[60px] rounded-full bg-gradient-to-br from-[#22c55e] to-[#16a34a] flex flex-col items-center justify-center border-[3px] border-[#bbf7d0] shadow-sm">
+                  <div className="text-[18px] font-bold text-white leading-none">30</div>
+                  <div className="text-[9px] font-bold text-white uppercase tracking-tighter">DÍAS</div>
                 </div>
               </div>
-              <div className="text-center md:text-left">
-                <p className="text-neutral-700 leading-relaxed text-[15px]">
-                  Garantía incondicional de 30 días. Si no sientes ningún cambio, te devuelvo cada centavo. Sin preguntas. <span className="font-bold text-neutral-900">El riesgo es todo mío.</span>
+              <div className="text-left">
+                <p className="text-[#7a7a8f] leading-relaxed text-[13px]">
+                  Garantía incondicional de 30 días. Si no sientes ningún cambio, te devuelvo cada centavo. Sin preguntas. <span className="font-bold text-[#1a1a2e]">El riesgo es todo mío.</span>
                 </p>
               </div>
             </div>
 
             {/* SEÇÃO 11 — Urgência final */}
-            <div className="rounded-2xl p-6 bg-purple-50 border border-purple-100 text-center shadow-inner">
-              <p className="text-[#7b2d8e] font-semibold leading-relaxed">
-                ⏳ Esta oferta solo aparece una vez. Cuando cierres esta página, desaparece para siempre.
+            <div className="rounded-[10px] p-3.5 bg-[#7b2d8e]/[0.04] border border-[#7b2d8e]/12 text-center flex items-center justify-center gap-2">
+              <FeatureIcon type="clock" />
+              <p className="text-[13px] text-[#7b2d8e] font-semibold">
+                Esta oferta solo aparece una vez. Cuando cierres esta página, desaparece para siempre.
               </p>
             </div>
 
             {/* SEÇÃO 12 — Frase de fechamento emocional */}
-            <div className="pt-8 pb-16 text-center space-y-4">
-              <p className="text-xl italic leading-relaxed text-neutral-700" style={{ fontFamily: '"Playfair Display", serif' }}>
+            <div className="pt-4 pb-16 text-center">
+              <p className="text-[17px] italic leading-relaxed text-[#3d3d54]" style={{ fontFamily: '"Cormorant Garamond", serif' }}>
                 "Ya diste el primer paso para recuperarlo. Este es el paso que asegura que no lo pierdas de nuevo."
               </p>
-              <div className="flex flex-col items-center gap-3 pt-2">
-                <div className="h-12 w-12 rounded-full overflow-hidden border-2 border-purple-200">
-                  <img src="https://i.imgur.com/C4JGtMM.jpg" alt="Dra. Paola" className="h-full w-full object-cover" />
-                </div>
-                <p className="font-bold text-lg" style={{ color: ACCENT }}>— Dra. Paola</p>
-              </div>
+              <p className="text-[14px] font-bold text-[#7b2d8e] mt-4">— Dra. Paola</p>
             </div>
-
-            {/* Para pruebas sem delay: descomente a linha abaixo no useEffect correspondente */}
           </div>
         </div>
       </div>
@@ -319,18 +342,19 @@ function FeatureCard({
   icon,
   title,
   desc,
+  className = '',
 }: {
   icon: React.ReactNode;
   title: string;
   desc: string;
+  className?: string;
 }) {
   return (
-    <div className="flex flex-col items-center text-center gap-3 rounded-2xl bg-white p-6 border border-[rgba(123,45,142,0.08)] shadow-sm transition-all hover:shadow-md hover:border-[rgba(123,45,142,0.2)]">
-      <div className="flex items-center justify-center rounded-xl bg-purple-50 p-3">{icon}</div>
-      <div className="space-y-2">
-        <p className="font-bold text-[17px]" style={{ color: TEXT_TITLE }}>{title}</p>
-        <p className="text-[15px] leading-relaxed text-neutral-500">{desc}</p>
+    <div className={`flex items-center gap-3 rounded-[16px] bg-white p-5 border border-white shadow-[0_1px_3px_rgba(0,0,0,0.04),0_8px_24px_rgba(123,45,142,0.06)] hover:translate-y-[-2px] hover:shadow-[0_4px_12px_rgba(0,0,0,0.05),0_12px_32px_rgba(123,45,142,0.1)] transition-all duration-300 ${className}`}>
+      <div className="flex-shrink-0 flex items-center justify-center rounded-full bg-[#7b2d8e]/[0.08] w-9 h-9">{icon}</div>
+      <div className="text-left">
+        <p className="font-bold text-[15px] text-[#1a1a2e]">{title}</p>
+        <p className="text-sm leading-relaxed text-[#7a7a8f]">{desc}</p>
       </div>
     </div>
-  );
-}
+  );}
